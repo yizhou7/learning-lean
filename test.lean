@@ -26,3 +26,12 @@ apply iff.intro,
               apply or.intro_right,
               apply and.elim_right a,
 end
+
+example : ∀ a b c : ℕ, a = b → a = c → c = b :=
+begin
+  intros,
+    transitivity a,
+    symmetry,
+    assumption,
+    assumption,
+end
