@@ -55,3 +55,10 @@ apply iff.intro,
         constructor,assumption,
         right, assumption,
 end
+
+example (p q : ℕ → Prop) : (∃ x, p x) → ∃ x, p x ∨ q x :=
+begin
+  intro h,
+    cases h with x px,
+      constructor, left, exact px,
+end
