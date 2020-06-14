@@ -62,3 +62,28 @@ begin
     cases h with x px,
       constructor, left, exact px,
 end
+
+example (p q : ℕ → Prop) :
+  (∃ x, p x ∧ q x) → ∃ x, q x ∧ p x :=
+begin
+  intro,
+  cases a with x hx,
+  cases hx,
+  existsi x, constructor, assumption, assumption,
+end
+
+
+universes u v
+
+def swap_pair {α : Type u} {β : Type v} : α × β → β × α :=
+begin
+  intro p,
+  cases p,
+  constructor, assumption, assumption,
+end
+
+
+example (x y : nat) (h : y = x + 7) : 2 * y = 2 * (x + 7) := 
+begin
+  rewrite h,
+end
