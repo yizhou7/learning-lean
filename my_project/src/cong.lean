@@ -19,27 +19,28 @@ begin
     apply nat.modeq.modeq_mul h1, apply rfl,
 end
 
-lemma cong_product (a b c d m : ℕ) : a ≡ c * b [MOD m] → c ≡ d [MOD m] → a ≡ d * b [MOD m] := 
+theorem cong_product (a b c d m : ℕ) (h1: a ≡ b * c [MOD m]) (h2: c ≡ d [MOD m]) : a ≡ b * d [MOD m] := 
 begin
-    intros h1 h2,
-    have h3: c * b ≡ d * b [MOD m], from 
+    have h3: b * c ≡ b * d [MOD m], from 
     begin
-        apply nat.modeq.modeq_mul, assumption, apply rfl,
+        apply nat.modeq.modeq_mul, apply rfl, assumption
     end,
     apply nat.modeq.trans h1 h3,
 end
 
--- lemma aaa (rr R R_INV a ar aar aaa n : ℕ) : R * R_INV ≡ 1 [MOD n] →
---     rr ≡ R * R [MOD n] →
---     ar ≡ a * rr * R_INV [MOD n] →
---     aar ≡ ar * ar * R_INV [MOD n] →
---     aaa ≡ aar * a * R_INV [MOD n] →
---     aaa ≡ a * a * a [MOD n] :=
--- begin
---     intros h1 h2 h3 h4 h5, 
---     apply show (aar ≡ ar * ar * R_INV [MOD n]),
---         begin
-
---         end,
-
--- end
+lemma aaa (rr R R_INV a ar aar aaa n : ℕ) : R * R_INV ≡ 1 [MOD n] →
+    rr ≡ R * R [MOD n] →
+    ar ≡ a * R_INV * rr [MOD n] →
+    aar ≡ ar * ar * R_INV [MOD n] →
+    aaa ≡ aar * a * R_INV [MOD n] →
+    aaa ≡ a * a * a [MOD n] :=
+begin
+    intros h1 h2 h3 h4 h5, 
+    have h7: ar ≡ a * R_INV * R * R [MOD n], from
+    begin
+        rw [mul_assoc],
+        apply cong_product ar (a * R_INV) rr (R * R) n, 
+        assumption, 
+        assumption, 
+    end,
+end
