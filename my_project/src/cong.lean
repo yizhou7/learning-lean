@@ -28,7 +28,8 @@ begin
     apply nat.modeq.trans h1 h3,
 end
 
-lemma aaa (rr R R_INV a ar aar aaa n : ℕ) : R * R_INV ≡ 1 [MOD n] →
+lemma aaa (rr R R_INV a ar aar aaa n : ℕ) :
+    R * R_INV ≡ 1 [MOD n] →
     rr ≡ R * R [MOD n] →
     ar ≡ a * R_INV * rr [MOD n] →
     aar ≡ ar * ar * R_INV [MOD n] →
@@ -36,11 +37,21 @@ lemma aaa (rr R R_INV a ar aar aaa n : ℕ) : R * R_INV ≡ 1 [MOD n] →
     aaa ≡ a * a * a [MOD n] :=
 begin
     intros h1 h2 h3 h4 h5, 
-    have h7: ar ≡ a * R_INV * R * R [MOD n], from
+    have h: ar ≡ a * R_INV * R * R [MOD n], from
     begin
         rw [mul_assoc],
         apply cong_product ar (a * R_INV) rr (R * R) n, 
         assumption, 
         assumption, 
     end,
+    
+    have h: ar ≡ a * R * 1 [MOD n], from
+    begin
+        apply cong_product ar (a * R) (R_INV * R) 1 n, 
+        rw [<- mul_assoc, mul_assoc a R, mul_comm R R_INV, <-mul_assoc],
+        assumption, 
+        rw [mul_comm],
+        assumption, 
+    end,
+    sorry
 end
