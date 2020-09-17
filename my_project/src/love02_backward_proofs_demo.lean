@@ -66,7 +66,7 @@ begin
   intro ha,
   apply hbc,
   apply hab,
-  apply ha
+  assumption,
 end
 
 /-! `exact` matches the goal's conclusion with the specified lemma, closing the

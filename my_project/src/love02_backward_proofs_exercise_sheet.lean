@@ -18,36 +18,58 @@ Section 2.3 in the Hitchhiker's Guide. -/
 
 lemma I (a : Prop) :
   a → a :=
-sorry
+begin
+  intro,
+  exact a_1,
+end 
 
 lemma K (a b : Prop) :
   a → b → b :=
-sorry
+begin
+  intros,
+  exact a_2,
+end
 
 lemma C (a b c : Prop) :
   (a → b → c) → b → a → c :=
-sorry
+begin
+  intros,
+  apply a_1 a_3 a_2,
+end
 
 lemma proj_1st (a : Prop) :
   a → a → a :=
-sorry
+begin
+  intros,
+  apply a_1,
+end
 
 /-! Please give a different answer than for `proj_1st`: -/
 
 lemma proj_2nd (a : Prop) :
   a → a → a :=
-sorry
+begin
+  intros,
+  apply a_2,
+end
 
 lemma some_nonsense (a b c : Prop) :
   (a → b → c) → a → (a → c) → b → c :=
-sorry
-
+begin
+  intros,
+  apply a_1 a_2 a_4,
+end
 /-! 1.2. Prove the contraposition rule using basic tactics. -/
 
 lemma contrapositive (a b : Prop) :
   (a → b) → ¬ b → ¬ a :=
-sorry
-
+begin
+  intros,
+  apply not.intro,
+  intro,
+  apply a_2,
+  apply a_1 a_3,
+end
 /-! 1.3. Prove the distributivity of `∀` over `∧` using basic tactics.
 
 Hint: This exercise is tricky, especially the right-to-left direction. Some
@@ -56,8 +78,13 @@ necessary. -/
 
 lemma forall_and {α : Type} (p q : α → Prop) :
   (∀x, p x ∧ q x) ↔ (∀x, p x) ∧ (∀x, q x) :=
-sorry
-
+begin
+  apply iff.intro,
+    intros,
+      apply and.intro,
+      { exact and.elim_right a },
+      { exact and.elim_left a }
+end
 
 /-! ## Question 2: Natural Numbers
 
@@ -68,21 +95,36 @@ sorry
 
 lemma mul_zero (n : ℕ) :
   mul 0 n = 0 :=
-sorry
+begin
+  induction n,
+  { refl },
+  { simp [n_ih, mul, add] }
+end
 
 lemma mul_succ (m n : ℕ) :
   mul (nat.succ m) n = add (mul m n) n :=
-sorry
+begin
+  induction n,
+    { simp [add, add_zero, mul] },
+    { simp [add, add_succ, n_ih, mul, mul_zero, add_assoc] },
+end
 
 /-! 2.2. Prove commutativity and associativity of multiplication using the
 `induction` tactic. Choose the induction variable carefully. -/
 
 lemma mul_comm (m n : ℕ) :
   mul m n = mul n m :=
-sorry
+begin
+  induction m,
+  { simp[mul_zero, mul] },
+  {
+    simp [mul_succ, m_ih, add, add_succ, mul, mul_zero, add_assoc, mul_add],
+    cc
+  },
+end
 
 lemma mul_assoc (l m n : ℕ) :
-  mul (mul l m) n = mul l (mul m n) := :=
+  mul (mul l m) n = mul l (mul m n) :=
 sorry
 
 /-! 2.3. Prove the symmetric variant of `mul_add` using `rewrite`. To apply
