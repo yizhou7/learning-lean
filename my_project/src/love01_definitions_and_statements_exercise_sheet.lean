@@ -114,18 +114,18 @@ def K : α → β → α :=
 λa b, a
 
 def C : (α → β → γ) → β → α → γ :=
-sorry
+λf b a, f a b
 
 def proj_1st : α → α → α :=
-sorry
+λ a b, a
 
 /-! Please give a different answer than for `proj_1st`. -/
 
 def proj_2nd : α → α → α :=
-sorry
+λ a b, b
 
 def some_nonsense : (α → β → γ) → α → (α → γ) → β → γ :=
-sorry
+λ f a g b, f a b
 
 /-! 3.2. Show the typing derivation for your definition of `C` above, on paper
 or using ASCII or Unicode art. You might find the characters `–` (to draw
