@@ -80,10 +80,27 @@ lemma forall_and {α : Type} (p q : α → Prop) :
   (∀x, p x ∧ q x) ↔ (∀x, p x) ∧ (∀x, q x) :=
 begin
   apply iff.intro,
-    intros,
-      apply and.intro,
-      { exact and.elim_right a },
-      { exact and.elim_left a }
+  {
+    intro hpq,
+    apply and.intro,
+    {
+      intros x,
+      apply and.elim_left,
+      apply hpq,
+    },
+    {
+      intros x,
+      apply and.elim_right,
+      apply hpq,
+    },
+  },
+  {
+    intro hconj,
+    intros x,
+    apply and.intro,
+    { apply and.elim_left hconj },
+    { apply and.elim_right hconj },
+  }
 end
 
 /-! ## Question 2: Natural Numbers
@@ -123,18 +140,36 @@ begin
   },
 end
 
-lemma mul_assoc (l m n : ℕ) :
-  mul (mul l m) n = mul l (mul m n) :=
-sorry
-
 /-! 2.3. Prove the symmetric variant of `mul_add` using `rewrite`. To apply
 commutativity at a specific position, instantiate the rule by passing some
 arguments (e.g., `mul_comm _ l`). -/
 
 lemma add_mul (l m n : ℕ) :
   mul (add l m) n = add (mul n l) (mul n m) :=
-sorry
+begin
+  induction l,
+  {
+    simp [add_zero, mul, mul_comm], 
+  },
+  {
+    rw mul_comm (add l_n.succ m) n,
+    apply mul_add,
+  },
+end
 
+lemma mul_assoc (l m n : ℕ) :
+  mul (mul l m) n = mul l (mul m n) :=
+begin
+  induction l,
+  { simp[mul_zero, mul] },
+  {
+    simp [mul_succ],
+    rw <- l_ih,
+    rw mul_comm (mul l_n m) n,
+    rw mul_comm m n,
+    rw add_mul (mul l_n m),
+  },
+end
 
 /-! ## Question 3 (**optional**): Intuitionistic Logic
 

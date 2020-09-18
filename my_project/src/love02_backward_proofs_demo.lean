@@ -237,8 +237,7 @@ lemma cong_fst_arg {α : Type} (a a' b : α)
     (f : α → α → α) (ha : a = a') :
   f a b = f a' b :=
 begin
-  apply eq.subst ha,
-  apply eq.refl
+  cc
 end
 
 lemma cong_two_args {α : Type} (a a' b b' : α)
@@ -257,8 +256,8 @@ lemma cong_two_args₂ {α : Type} (a a' b b' : α)
     (f : α → α → α) (ha : a = a') (hb : b = b') :
   f a b = f a' b' :=
 begin
-  rewrite ha,
-  rewrite hb
+  rw ha,
+  rw hb
 end
 
 lemma a_proof_of_negation₃ (a : Prop) :
