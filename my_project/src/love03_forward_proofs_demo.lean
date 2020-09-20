@@ -22,11 +22,13 @@ The simplest kind of structured proof is the name of a lemma, possibly with
 arguments. -/
 
 lemma add_comm_zero_left (n : ℕ) :
-  add 0 n = add n 0 :=
-add_comm 0 n
+  0 + n = n + 0 :=
+begin
+  apply add_comm 0 n
+end 
 
 lemma add_comm_zero_left₂ (n : ℕ) :
-  add 0 n = add n 0 :=
+  0 + n = n + 0 :=
 by exact add_comm 0 n
 
 /-! `fix` and `assume` move `∀`-quantified variables and assumptions from the

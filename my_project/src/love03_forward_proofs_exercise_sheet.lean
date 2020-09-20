@@ -15,7 +15,9 @@ namespace LoVe
 
 lemma I (a : Prop) :
   a → a :=
-sorry
+assume ha : a,
+show a, from
+  ha
 
 lemma K (a b : Prop) :
   a → b → b :=
