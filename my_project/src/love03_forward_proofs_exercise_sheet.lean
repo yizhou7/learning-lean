@@ -105,7 +105,6 @@ lemma forall_and_inst {α : Type} (r s : α → α → Prop) :
   (∀x, r x x ∧ s x x) ↔ (∀x, r x x) ∧ (∀x, s x x) :=
 sorry
 
-
 /-! ## Question 2: Chain of Equalities
 
 2.1. Write the following proof using `calc`.
@@ -119,9 +118,19 @@ sorry
 Hint: You might need the tactics `simp` and `cc` and the lemmas `mul_add`,
 `add_mul`, and `two_mul`. -/
 
+#check add_mul
+#check mul_add
+#check two_mul
+
 lemma binomial_square (a b : ℕ) :
   (a + b) * (a + b) = a * a + 2 * a * b + b * b :=
-sorry
+calc (a + b) * (a + b)
+    = a * (a + b) + b * (a + b): by rewrite add_mul
+... = a * a + a * b + b * (a + b): by rewrite <- mul_add
+... = a * a + a * b + (b * a + b * b): by simp [mul_add b a b]
+... = a * a + (a * b + a * b) + b * b: by cc
+... = a * a + 2 * (a * b) + b * b: by rewrite two_mul (a * b)
+... = a * a + 2 * a * b + b * b: by cc
 
 /-! 2.2. Prove the same argument again, this time as a structured proof. Try to
 reuse as much of the above proof idea as possible. -/
