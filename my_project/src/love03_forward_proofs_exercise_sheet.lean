@@ -137,14 +137,23 @@ reuse as much of the above proof idea as possible. -/
 
 lemma binomial_square₂ (a b : ℕ) :
   (a + b) * (a + b) = a * a + 2 * a * b + b * b :=
-sorry
+have h1: (a + b) * (a + b) = a * (a + b) + b * (a + b), by rewrite add_mul,
+have h2: a * (a + b) + b * (a + b) = a * a + a * b + b * (a + b), by rewrite <- mul_add,
+have h3: a * a + a * b + b * (a + b) = a * a + a * b + (b * a + b * b), by simp [mul_add b a b],
+have h4: (a + b) * (a + b) = a * a + (a * b + a * b) + b * b, by cc,
+have h5: a * a + (a * b + a * b) + b * b = a * a + 2 * (a * b) + b * b, by rewrite two_mul (a * b),
+show (a + b) * (a + b) = a * a + 2 * a * b + b * b, from
+begin
+  cc,
+end
 
 /-! 2.3. Prove the same lemma again, this time using tactics. -/
 
 lemma binomial_square₃ (a b : ℕ) :
   (a + b) * (a + b) = a * a + 2 * a * b + b * b :=
 begin
-  sorry
+  simp [add_mul, mul_add, two_mul],
+  cc
 end
 
 
