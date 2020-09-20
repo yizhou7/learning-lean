@@ -36,30 +36,68 @@ show c, from
 
 lemma proj_1st (a : Prop) :
   a → a → a :=
-sorry
+assume ha1: a,
+assume ha2: a,
+show a, from
+  ha1
 
 /-! Please give a different answer than for `proj_1st`. -/
 
 lemma proj_2nd (a : Prop) :
   a → a → a :=
-sorry
+assume ha1: a,
+assume ha2: a,
+show a, from
+  ha2
 
 lemma some_nonsense (a b c : Prop) :
   (a → b → c) → a → (a → c) → b → c :=
-sorry
+assume habc: (a → b → c),
+assume ha: a,
+assume hac: (a → c),
+assume hb: b,
+show c, from 
+  habc ha hb
 
 /-! 1.2. Supply a structured proof of the contraposition rule. -/
 
 lemma contrapositive (a b : Prop) :
   (a → b) → ¬ b → ¬ a :=
-sorry
+assume hab: a → b,
+assume nb: ¬ b,
+show ¬ a, from
+begin
+  apply not.intro,
+  intro,
+  apply nb,
+  apply hab,
+  apply a_1,
+end
 
 /-! 1.3. Supply a structured proof of the distributivity of `∀` over `∧`. -/
 
 lemma forall_and {α : Type} (p q : α → Prop) :
   (∀x, p x ∧ q x) ↔ (∀x, p x) ∧ (∀x, q x) :=
-sorry
-
+iff.intro
+  (assume pq: ∀ (x : α), p x ∧ q x,
+    have px : (∀x, p x) := 
+      fix x: α,
+      and.elim_left (pq x),
+    have qx :(∀x, q x) :=
+      fix x: α,
+      and.elim_right (pq x),
+    show (∀x, p x) ∧ (∀x, q x), from
+      and.intro px qx
+  )
+  (assume pq: (∀x, p x) ∧ (∀x, q x),
+    fix x: α,
+    have px: p x := 
+      and.elim_left pq x,
+    have qx: q x := 
+      and.elim_right pq x,
+    show (p x) ∧ (q x), from
+      and.intro px qx
+  )
 /-! 1.4. Reuse, if possible, the lemma `forall_and` you proved above to prove
 the following instance of the lemma. -/
 

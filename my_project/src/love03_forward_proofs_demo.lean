@@ -126,7 +126,9 @@ lemma not_not_intro (a : Prop) :
 assume ha : a,
 assume hna : ¬ a,
 show false, from
-  hna ha
+  begin
+    apply hna ha,
+  end
 
 lemma forall.one_point {α : Type} (t : α) (p : α → Prop) :
   (∀x, x = t → p x) ↔ p t :=
