@@ -21,11 +21,18 @@ show a, from
 
 lemma K (a b : Prop) :
   a → b → b :=
-sorry
+assume ha: a,
+assume hb: b,
+show b, from
+  hb
 
 lemma C (a b c : Prop) :
   (a → b → c) → b → a → c :=
-sorry
+assume habc: (a → b → c),
+assume hb: b,
+assume ha: a,
+show c, from 
+  habc ha hb
 
 lemma proj_1st (a : Prop) :
   a → a → a :=
