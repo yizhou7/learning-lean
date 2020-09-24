@@ -36,7 +36,7 @@ show c, from
 
 lemma proj_1st (a : Prop) :
   a → a → a :=
-assume ha1: a,
+assume ha1,
 assume ha2: a,
 show a, from
   ha1
@@ -103,7 +103,7 @@ the following instance of the lemma. -/
 
 lemma forall_and_inst {α : Type} (r s : α → α → Prop) :
   (∀x, r x x ∧ s x x) ↔ (∀x, r x x) ∧ (∀x, s x x) :=
-sorry
+forall_and _ _
 
 /-! ## Question 2: Chain of Equalities
 
@@ -117,10 +117,6 @@ sorry
 
 Hint: You might need the tactics `simp` and `cc` and the lemmas `mul_add`,
 `add_mul`, and `two_mul`. -/
-
-#check add_mul
-#check mul_add
-#check two_mul
 
 lemma binomial_square (a b : ℕ) :
   (a + b) * (a + b) = a * a + 2 * a * b + b * b :=
