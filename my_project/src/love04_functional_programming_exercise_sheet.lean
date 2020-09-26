@@ -109,8 +109,10 @@ at the front of a list.
 To avoid unpleasant surprises in the proofs, we recommend that you follow the
 same recursion pattern as for `drop` above. -/
 
-def take {α : Type} : ℕ → list α → list α :=
-sorry
+def take {α : Type} : ℕ → list α → list α
+| 0       xs        := []
+| (_ + 1) []        := []
+| (m + 1) (x :: xs) := x :: take m xs
 
 #eval take 0 [3, 7, 11]   -- expected: []
 #eval take 1 [3, 7, 11]   -- expected: [3]
@@ -126,11 +128,29 @@ attribute. -/
 
 @[simp] lemma drop_nil {α : Type} :
   ∀n : ℕ, drop n ([] : list α) = [] :=
-sorry
+begin
+  intros n,
+  induction n,
+  {
+    simp [drop],
+  },
+  {
+    simp [drop],
+  }
+end
 
 @[simp] lemma take_nil {α : Type} :
   ∀n : ℕ, take n ([] : list α) = [] :=
-sorry
+begin
+  intros n,
+  induction n,
+  {
+    simp [take],
+  },
+  {
+    simp [take],
+  }
+end
 
 /-! 2.3. Follow the recursion pattern of `drop` and `take` to prove the
 following lemmas. In other words, for each lemma, there should be three cases,
