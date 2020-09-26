@@ -423,7 +423,13 @@ sorry
 
 lemma reverse_reverse {α : Type} (xs : list α) :
   reverse (reverse xs) = xs :=
-sorry
+begin
+  induction xs,
+  {refl},
+  {
+    sorry
+  }
+end
 
 /-! Axioms are like lemmas but without proofs (`:= …`). Constant declarations
 are like definitions but without bodies (`:= …`). -/

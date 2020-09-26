@@ -30,11 +30,12 @@ lemma accurev_eq_reverse_append {α : Type} :
 begin
   intros,
   induction xs,
-  case list.nil {
+  {
     refl
   },
-  case list.cons : y ys ih {
+  case list.cons : x xs ih {
     -- simp [reverse],
+    -- rw accurev,
   }
 end
 
@@ -61,7 +62,9 @@ Hint: A one-line inductionless proof is possible. -/
 
 lemma accurev_accurev {α : Type} (xs : list α) :
   accurev [] (accurev [] xs) = xs :=
-sorry
+begin
+  simp [accurev_eq_reverse, reverse_reverse],
+end
 
 /-! 1.4. Prove the following lemma by structural induction, as a "paper" proof.
 This is a good exercise to develop a deeper understanding of how structural
