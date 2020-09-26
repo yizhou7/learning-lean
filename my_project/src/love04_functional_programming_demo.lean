@@ -307,7 +307,6 @@ lemma injection_example {α : Type} (x y : α) (xs ys : list α)
   x = y ∧ xs = ys :=
 begin
   cases h,
-  clear h,
   cc
 end
 

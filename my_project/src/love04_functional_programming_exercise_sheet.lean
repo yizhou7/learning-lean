@@ -27,13 +27,33 @@ not strong enough. Start by proving the following generalization (using the
 
 lemma accurev_eq_reverse_append {α : Type} :
   ∀as xs : list α, accurev as xs = reverse xs ++ as :=
-sorry
+begin
+  intros,
+  induction xs,
+  case list.nil {
+    refl
+  },
+  case list.cons : y ys ih {
+    -- simp [reverse],
+  }
+end
 
 /-! 1.2. Derive the desired equation. -/
 
+#check accurev_eq_reverse_append
+
+lemma append_nil {α : Type} (xs : list α) :
+  reverse xs = reverse xs ++ [] := 
+begin
+  simp [refl]
+end
+
 lemma accurev_eq_reverse {α : Type} (xs : list α) :
   accurev [] xs = reverse xs :=
-sorry
+begin
+  rw append_nil xs,
+  apply accurev_eq_reverse_append [] xs,
+end
 
 /-! 1.3. Prove the following property.
 

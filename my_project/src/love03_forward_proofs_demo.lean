@@ -349,7 +349,7 @@ Proofs:
 
 lemma and_swap₃ (a b : Prop) :
   a ∧ b → b ∧ a :=
-λhab : a ∧ b, and.intro (and.elim_right hab) (and.elim_left hab)
+λ hab : a ∧ b, and.intro (and.elim_right hab) (and.elim_left hab)
 
 lemma and_swap₄ (a b : Prop) :
   a ∧ b → b ∧ a :=
