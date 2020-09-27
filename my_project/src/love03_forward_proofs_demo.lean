@@ -390,10 +390,12 @@ lemma reverse_append₂ {α : Type} (xs ys : list α) :
   reverse (xs ++ ys) = reverse ys ++ reverse xs :=
 begin
   induction xs,
-  case list.nil {
-    simp [reverse] },
-  case list.cons : x xs ih {
-    simp [reverse, ih] }
+  {
+    simp [reverse],
+  },
+  {
+    simp [reverse, xs_ih],
+  }
 end
 
 lemma reverse_reverse {α : Type} :

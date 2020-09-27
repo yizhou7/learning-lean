@@ -26,16 +26,16 @@ not strong enough. Start by proving the following generalization (using the
 `induction` tactic or pattern matching): -/
 
 lemma accurev_eq_reverse_append {α : Type} :
-  ∀as xs : list α, accurev as xs = reverse xs ++ as :=
+  ∀ xs as : list α, accurev as xs = reverse xs ++ as :=
 begin
-  intros,
+  intro xs,
   induction xs,
   {
-    refl
+    intro as,
+    simp [accurev,reverse],
   },
-  case list.cons : x xs ih {
-    -- simp [reverse],
-    -- rw accurev,
+  {
+    simp [accurev,reverse, xs_ih],
   }
 end
 
@@ -53,7 +53,7 @@ lemma accurev_eq_reverse {α : Type} (xs : list α) :
   accurev [] xs = reverse xs :=
 begin
   rw append_nil xs,
-  apply accurev_eq_reverse_append [] xs,
+  apply accurev_eq_reverse_append xs [],
 end
 
 /-! 1.3. Prove the following property.
@@ -163,7 +163,16 @@ Hint: The `refl` tactic might be useful in the third case of `drop_drop`. -/
 
 lemma drop_drop {α : Type} :
   ∀(m n : ℕ) (xs : list α), drop n (drop m xs) = drop (n + m) xs
-| 0       n xs        := by refl
+| 0         n xs        := by refl
+| m         0 xs        := by simp [drop]
+| m      n xs        := by
+begin
+  induction xs,
+  { simp [drop],},
+  {
+ 
+  },
+end
 -- supply the two missing cases here
 
 lemma take_take {α : Type} :
