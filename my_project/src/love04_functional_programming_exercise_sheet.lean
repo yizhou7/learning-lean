@@ -165,13 +165,17 @@ lemma drop_drop {α : Type} :
   ∀(m n : ℕ) (xs : list α), drop n (drop m xs) = drop (n + m) xs
 | 0         n xs        := by refl
 | m         0 xs        := by simp [drop]
-| m      n xs        := by
+| (m+1)     n xs        := by
 begin
-  induction xs,
-  { simp [drop],},
-  {
- 
-  },
+    cases xs,
+    {
+      simp [drop],
+    },
+    { 
+      simp [drop, drop_drop],
+      calc drop (n + (m + 1)) (xs_hd :: xs_tl)
+      = drop (n + m + 1) (xs_hd :: xs_tl): by refl,
+    }
 end
 -- supply the two missing cases here
 
