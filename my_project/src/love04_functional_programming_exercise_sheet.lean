@@ -202,12 +202,19 @@ by the following context-free grammar:
 
 -- enter your definition here
 
+inductive term : Type
+  | var (x: string) : term
+  | lam (x: string) (t: term): term
+  | app (t: term) (u: term): term
+
 /-! 3.2. Register a textual representation of the type `term` as an instance of
 the `has_repr` type class. Make sure to supply enough parentheses to guarantee
 that the output is unambiguous. -/
 
 def term.repr : term → string
--- enter your answer here
+  | (term.var x) := x
+  | (term.lam x t) := "λ" ++ x ++ ",(" ++ (term.repr t) ++ ")"
+  | (term.app t u) := "(" ++ (term.repr t) ++ " " ++(term.repr u) ++ ")"
 
 @[instance] def term.has_repr : has_repr term :=
 { repr := term.repr }
