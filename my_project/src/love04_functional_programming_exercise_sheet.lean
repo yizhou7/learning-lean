@@ -180,8 +180,13 @@ end
 -- supply the two missing cases here
 
 lemma take_take {α : Type} :
-  ∀(m : ℕ) (xs : list α), take m (take m xs) = take m xs :=
-sorry
+  ∀ (m : ℕ) (xs : list α), take m (take m xs) = take m xs
+  | 0 xs := by simp [take]
+  | m [] := by simp [take]
+  | (n + 1) (x :: xs) := 
+begin
+  simp [take, take_take],
+end
 
 lemma take_drop {α : Type} :
   ∀(n : ℕ) (xs : list α), take n xs ++ drop n xs = xs :=
