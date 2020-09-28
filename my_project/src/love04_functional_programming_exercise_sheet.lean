@@ -183,15 +183,13 @@ lemma take_take {α : Type} :
   ∀ (m : ℕ) (xs : list α), take m (take m xs) = take m xs
   | 0 xs := by simp [take]
   | m [] := by simp [take]
-  | (n + 1) (x :: xs) := 
-begin
-  simp [take, take_take],
-end
+  | (n + 1) (x :: xs) := by simp [take, take_take]
 
 lemma take_drop {α : Type} :
-  ∀(n : ℕ) (xs : list α), take n xs ++ drop n xs = xs :=
-sorry
-
+  ∀(n : ℕ) (xs : list α), take n xs ++ drop n xs = xs
+  | 0 xs := by simp [take, drop]
+  | m [] := by simp [take]
+  | (m + 1) (x :: xs) := by simp [take, drop, take_drop]
 
 /-! ## Question 3: A Type of λ-Terms
 
