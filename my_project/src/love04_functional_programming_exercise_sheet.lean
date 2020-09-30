@@ -28,15 +28,10 @@ not strong enough. Start by proving the following generalization (using the
 lemma accurev_eq_reverse_append {α : Type} :
   ∀ xs as : list α, accurev as xs = reverse xs ++ as :=
 begin
-  intro xs,
-  induction xs,
-  {
-    intro as,
-    simp [accurev,reverse],
-  },
-  {
-    simp [accurev,reverse, xs_ih],
-  }
+  intros,
+  induction xs generalizing as,
+  simp [accurev,reverse],
+  simp [accurev,reverse, xs_ih],
 end
 
 /-! 1.2. Derive the desired equation. -/
