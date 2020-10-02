@@ -325,6 +325,15 @@ def map₂ {α β : Type} : (α → β) → list α → list β
 | _ []        := []
 | f (x :: xs) := f x :: map₂ f xs
 
+lemma map_equiv  {α β : Type} (f : α → β) (xs : list α):
+  map f xs = map₂ f xs :=
+begin
+  intros,
+  induction xs,
+  simp [map, map₂],
+  simp [map, map₂, xs_ih],
+end
+
 #check list.map
 
 lemma map_ident {α : Type} (xs : list α) :
@@ -425,14 +434,10 @@ lemma length_zip {α β : Type} (xs : list α) (ys : list β) :
   length (zip xs ys) = min (length xs) (length ys) :=
 begin
   induction xs generalizing ys,
-  case list.nil {
-    refl },
-  case list.cons : x xs ih {
-    cases ys,
-    case list.nil {
-      refl },
-    case list.cons : y ys {
-      simp [zip, length, ih, min_add_add] } }
+    refl,
+      cases ys,
+        refl,
+        simp [zip, length, xs_ih, min_add_add],
 end
 
 lemma map_zip {α α' β β' : Type} (f : α → α') (g : β → β') :

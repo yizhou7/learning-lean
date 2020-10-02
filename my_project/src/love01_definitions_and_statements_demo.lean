@@ -333,12 +333,14 @@ def power : ℕ → ℕ → ℕ
 | m (nat.succ n) := m * power m n
 
 #eval power 2 5
+#check power
 
 def power₂ (m : ℕ) : ℕ → ℕ
 | nat.zero     := 1
 | (nat.succ n) := m * power₂ n
 
 #eval power₂ 2 5
+#check power₂
 
 def iter (α : Type) (z : α) (f : α → α) : ℕ → α
 | nat.zero     := z
@@ -372,7 +374,7 @@ def append₂ {α : Type} : list α → list α → list α
 #eval append₂ [3, 1] [4, 1, 5]
 
 #check @append₂
-#eval @append₂ _ [3, 1] [4, 1, 5]
+#eval @append₂ ℕ [3, 1] [4, 1, 5]
 
 def append₃ {α : Type} : list α → list α → list α
 | []        ys := ys

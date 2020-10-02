@@ -51,7 +51,7 @@ We can put all the ugliness in one function, which we call `bind_opt`: -/
 
 def bind_opt {α : Type} {β : Type} :
   option α → (α → option β) → option β
-| option.none     f := option.none
+| option.none     _ := option.none
 | (option.some a) f := f a
 
 def sum_2_5_7₂ (ns : list ℕ) : option ℕ :=
@@ -63,7 +63,7 @@ bind_opt (list.nth ns 1)
 /-! Instead of defining `bind_opt` ourselves, we can use Lean's predefined
 general `bind` operation. We can also use `pure` instead of `option.some`: -/
 
-#check bind
+#check @bind
 
 def sum_2_5_7₃ (ns : list ℕ) : option ℕ :=
 bind (list.nth ns 1)
@@ -265,7 +265,8 @@ def id.bind {α β : Type} : id α → (α → id β) → id β
     begin
       intros α β γ f g m,
       refl
-    end }
+    end
+}
 
 
 /-! ## Exceptions -/

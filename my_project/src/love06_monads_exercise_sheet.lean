@@ -41,7 +41,12 @@ def option.orelse {α : Type} : option α → option α → option α
 { emp          := λα, option.none,
   orelse       := @option.orelse,
   emp_orelse   :=
-    sorry,
+    begin
+      intros,
+      cases a,
+      { refl },
+      { refl },
+    end,
   orelse_emp   :=
     begin
       intros α a,
@@ -50,15 +55,36 @@ def option.orelse {α : Type} : option α → option α → option α
       { refl }
     end,
   orelse_assoc :=
-    sorry,
+    begin
+      intros α a,
+      cases a,
+      {
+        intros,
+        refl,
+      },
+      {
+        intros,
+        refl,
+      }
+    end,
   emp_bind     :=
     begin
       intros α β f,
       refl
     end,
   bind_emp     :=
-    sorry,
-  .. option.lawful_monad }
+    begin
+      intros α β f,
+      cases f,
+      {
+        refl,
+      },
+      {
+        refl,
+      }
+    end,
+  .. option.lawful_monad
+}
 
 @[simp] lemma option.some_bind {α β : Type} (a : α) (g : α → option β) :
   (option.some a >>= g) = g a :=
