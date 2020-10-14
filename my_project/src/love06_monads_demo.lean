@@ -242,6 +242,8 @@ proofs of the monad laws.
 
 ## Identity -/
 
+#check id
+
 def id.pure {α : Type} : α → id α :=
 id
 

@@ -88,7 +88,9 @@ def option.orelse {α : Type} : option α → option α → option α
 
 @[simp] lemma option.some_bind {α β : Type} (a : α) (g : α → option β) :
   (option.some a >>= g) = g a :=
-sorry
+begin
+  refl,
+end
 
 /-! Let us enable some convenient pattern matching syntax, by instantiating
 Lean's `monad_fail` type class. (Do not worry if you do not understand what
