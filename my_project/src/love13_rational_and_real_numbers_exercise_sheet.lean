@@ -1,7 +1,6 @@
 import .love05_inductive_predicates_demo
 import .love13_rational_and_real_numbers_demo
 
-
 /-! # LoVe Exercise 13: Rational and Real Numbers -/
 
 
@@ -47,3 +46,7 @@ an instance of `semigroup`. -/
   ..rat.has_mul }
 
 end LoVe
+
+
+-- lemma rat_test : ℚ 
+-- #eval  0 0   -- expected: 0

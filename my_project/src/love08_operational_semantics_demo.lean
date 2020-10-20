@@ -195,39 +195,39 @@ lemma big_step_deterministic {S s l r} (hl : (S, s) ⟹ l)
     (hr : (S, s) ⟹ r) :
   l = r :=
 begin
-  induction hl generalizing r,
-  case big_step.skip : s t {
-    cases hr,
-    refl },
-  case big_step.assign : x a s {
-    cases hr,
-    refl },
-  case big_step.seq : S T s t l hS hT ihS ihT {
-    cases hr with _ _ _ _ _ _ _ t' _ hS' hT',
-    cases ihS hS',
-    cases ihT hT',
-    refl },
-  case big_step.ite_true : b S T s t hb hS ih {
-    cases hr,
-    { apply ih,
-      assumption },
-    { apply ih,
-      cc } },
-  case big_step.ite_false : b S T s t hb hT ih {
-    cases hr,
-    { apply ih,
-      cc },
-    { apply ih,
-      assumption } },
-  case big_step.while_true : b S s t u hb hS hw ihS ihw {
-    cases hr,
-    { cases ihS hr_hbody,
-      cases ihw hr_hrest,
-      refl },
-    { cc } },
-  { cases hr,
-    { cc },
-    { refl } }
+    induction hl generalizing r,
+    case big_step.skip : s t {
+        cases hr,
+        refl },
+    case big_step.assign : x a s {
+        cases hr,
+        refl },
+    case big_step.seq : S T s t l hS hT ihS ihT {
+        cases hr with _ _ _ _ _ _ _ t' _ hS' hT',
+        cases ihS hS',
+        cases ihT hT',
+        refl },
+    case big_step.ite_true : b S T s t hb hS ih {
+        cases hr,
+        { apply ih,
+        assumption },
+        { apply ih,
+        cc } },
+    case big_step.ite_false : b S T s t hb hT ih {
+        cases hr,
+        { apply ih,
+        cc },
+        { apply ih,
+        assumption } },
+    case big_step.while_true : b S s t u hb hS hw ihS ihw {
+        cases hr,
+        { cases ihS hr_hbody,
+        cases ihw hr_hrest,
+        refl },
+        { cc } },
+    { cases hr,
+        { cc },
+        { refl } }
 end
 
 lemma big_step_terminates {S s} :

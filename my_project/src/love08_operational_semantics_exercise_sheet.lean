@@ -46,7 +46,17 @@ show (S₁, s) ⟹ t ↔ (S₃, s) ⟹ t, from
 
 lemma big_step_equiv.skip_assign_id {x} :
   stmt.assign x (λs, s x) ≈ stmt.skip :=
-sorry
+begin
+    unfold big_step_equiv,
+    intros,
+    apply iff.intro,
+    {
+        simp [big_step_skip_iff],
+    },
+    {
+        simp [big_step_skip_iff],
+    }
+end
 
 lemma big_step_equiv.seq_skip_left {S : stmt} :
   stmt.skip ;; S ≈ S :=

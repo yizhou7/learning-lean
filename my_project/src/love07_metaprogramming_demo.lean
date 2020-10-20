@@ -176,7 +176,6 @@ begin
   repeat { sorry }
 end
 
-
 /- ## The Metaprogramming Monad
 
 Tactics have access to
@@ -227,8 +226,8 @@ do
 lemma even_18_and_even_20 (α : Type) (a : α) :
   even 18 ∧ even 20 :=
 by do
-  tactic.applyc ``and.intro,
   trace_goals,
+  tactic.applyc ``and.intro,
   intro_and_even
 
 lemma triv_imp (a : Prop) (h : a) :
