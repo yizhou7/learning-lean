@@ -50,25 +50,78 @@ begin
     unfold big_step_equiv,
     intros,
     apply iff.intro,
-    {
+    repeat {
         simp [big_step_skip_iff],
     },
-    {
-        simp [big_step_skip_iff],
-    }
 end
 
 lemma big_step_equiv.seq_skip_left {S : stmt} :
   stmt.skip ;; S ≈ S :=
-sorry
+begin
+    unfold big_step_equiv,
+    intros,
+    apply iff.intro,
+    repeat {
+        simp [big_step_skip_iff],
+    },
+end
 
 lemma big_step_equiv.seq_skip_right {S : stmt} :
   S ;; stmt.skip ≈ S :=
-sorry
+begin
+    unfold big_step_equiv,
+    intros,
+    apply iff.intro,
+    repeat {
+        simp [big_step_skip_iff],
+    },
+end
 
 lemma big_step_equiv.ite_seq_while {b} {S : stmt} :
   stmt.ite b (S ;; stmt.while b S) stmt.skip ≈ stmt.while b S :=
-sorry
+begin
+    unfold big_step_equiv,
+    intros s t,
+    apply iff.intro,
+    {
+        intro h,
+        cases h,
+        {
+            cases h_hbody,
+            rw [big_step_while_true_iff h_hcond],
+            existsi h_hbody_t,
+            tautology,
+        },
+        {
+            cases h_hbody,
+            rw [big_step_while_false_iff h_hcond],
+        },
+    },
+    {
+        intro h,
+        cases h,
+        {
+            rw [big_step_ite_iff],
+            apply or.intro_left,
+            apply and.intro,
+            { assumption },
+            {
+                rw [big_step_seq_iff],
+                existsi h_t,
+                tautology,
+            }
+        },
+        {
+            rw [big_step_ite_iff],
+            apply or.intro_right,
+            apply and.intro,
+            { assumption },
+            {
+                simp [big_step_skip_iff],
+            }
+        }
+    }
+end
 
 /-! 1.2. Program equivalence can be used to replace subprograms by other
 subprograms with the same semantics. Prove the following so-called congruence
