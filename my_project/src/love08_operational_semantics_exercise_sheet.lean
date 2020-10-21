@@ -338,12 +338,61 @@ end
 
 @[simp] lemma big_step_seq_iff {S₁ S₂ s t} :
   (stmt.seq S₁ S₂, s) ⟹ t ↔ (∃u, (S₁, s) ⟹ u ∧ (S₂, u) ⟹ t) :=
-sorry
+begin
+    apply iff.intro,
+    {
+        intro h,
+        cases h,
+        tautology,
+    },
+    {
+        intro h,
+        cases h,
+        cases h_h,
+        apply big_step.seq, 
+        assumption,
+        assumption,
+    }
+end
 
 lemma big_step_loop {S s u} :
   (stmt.loop S, s) ⟹ u ↔
   (s = u ∨ (∃t, (S, s) ⟹ t ∧ (stmt.loop S, t) ⟹ u)) :=
-sorry
+begin
+    apply iff.intro,
+    {
+        intro h,
+        cases h,
+        {
+            apply or.intro_left,
+            tautology,
+        },
+        {
+            apply or.intro_right,
+            existsi h_t,
+            apply and.intro,
+            assumption,
+            assumption,
+        }
+    },
+    {
+        intro h,
+        cases h,
+        {
+            rw h,
+            apply big_step.loop_base, 
+        },
+        {
+            cases h,
+            cases h_h,
+            apply big_step.loop_step, 
+            {
+                apply h_h_left,
+            },
+            assumption,
+        }
+    }
+end
 
 @[simp] lemma big_step_choice {Ss s t} :
   (stmt.choice Ss, s) ⟹ t ↔
