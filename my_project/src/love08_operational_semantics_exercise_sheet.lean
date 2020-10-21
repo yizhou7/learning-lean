@@ -235,8 +235,7 @@ end
 difficult. -/
 
 lemma denote_equiv.while_congr {b} {S₁ S₂ : stmt} (hS : S₁ ≈ S₂) :
-  stmt.while b S₁ ≈ stmt.while b S₂ :=
-
+  stmt.while b S₁ ≈ stmt.while b S₂ := sorry
 
 /-! ## Question 2: Guarded Command Language (GCL)
 
@@ -302,11 +301,40 @@ WHILE language. -/
 
 @[simp] lemma big_step_assign_iff {x a s t} :
   (stmt.assign x a, s) ⟹ t ↔ t = s{x ↦ a s} :=
-sorry
+begin
+    apply iff.intro,
+    {
+        intro h,
+        cases h,
+        refl,
+    },
+    {
+        intro h,
+        cases h,
+        apply big_step.assign, 
+    }
+end
 
 @[simp] lemma big_step_assert {b s t} :
   (stmt.assert b, s) ⟹ t ↔ t = s ∧ b s :=
-sorry
+begin
+    apply iff.intro,
+    {
+        intro h,
+        cases h,
+        tautology,
+    },
+    {
+        intro h,
+        cases h,
+        have  h1 : (stmt.assert b, s) ⟹ s :=
+            begin
+                apply big_step.assert, 
+                assumption,
+            end,
+        cc,
+    }
+end
 
 @[simp] lemma big_step_seq_iff {S₁ S₂ s t} :
   (stmt.seq S₁ S₂, s) ⟹ t ↔ (∃u, (S₁, s) ⟹ u ∧ (S₂, u) ⟹ t) :=
