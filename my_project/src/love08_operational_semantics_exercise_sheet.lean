@@ -86,15 +86,22 @@ begin
     {
         intro h,
         cases h,
+        cases h_hbody,
         {
-            cases h_hbody,
-            rw [big_step_while_true_iff h_hcond],
-            existsi h_hbody_t,
-            tautology,
+            rw [big_step_while_true_iff],
+            {
+                existsi h_hbody_t,
+                tautology,
+            },
+            { assumption, }
         },
         {
-            cases h_hbody,
-            rw [big_step_while_false_iff h_hcond],
+            rw [big_step_while_false_iff],
+            {
+                cases h_hbody,
+                tautology,
+            },
+            { assumption, }
         },
     },
     {
@@ -104,7 +111,7 @@ begin
             rw [big_step_ite_iff],
             apply or.intro_left,
             apply and.intro,
-            { assumption },
+            { assumption, },
             {
                 rw [big_step_seq_iff],
                 existsi h_t,
@@ -115,12 +122,10 @@ begin
             rw [big_step_ite_iff],
             apply or.intro_right,
             apply and.intro,
-            { assumption },
-            {
-                simp [big_step_skip_iff],
-            }
+            { assumption, },
+            { rw [big_step_skip_iff],}
         }
-    }
+    },
 end
 
 /-! 1.2. Program equivalence can be used to replace subprograms by other
