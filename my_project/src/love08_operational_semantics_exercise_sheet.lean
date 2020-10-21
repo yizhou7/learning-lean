@@ -171,7 +171,60 @@ end
 lemma big_step_equiv.ite_congr {b} {S₁ S₂ T₁ T₂ : stmt} (hS : S₁ ≈ S₂)
     (hT : T₁ ≈ T₂) :
   stmt.ite b S₁ T₁ ≈ stmt.ite b S₂ T₂ :=
-sorry
+begin
+    unfold big_step_equiv,
+    intros,
+    unfold big_step_equiv at hS hT,
+    apply iff.intro,
+    {
+        intro h,
+        cases h,
+        {
+            rw [big_step_ite_iff],
+            apply or.intro_left,
+            apply and.intro,
+            { assumption, },
+            {
+                apply (hS s t).mp,
+                assumption,
+            },
+        },
+        {
+            rw [big_step_ite_iff],
+            apply or.intro_right,
+            apply and.intro,
+            { assumption, },
+            {
+                apply (hT s t).mp,
+                assumption,
+            },
+        }
+    },
+    {
+        intro h,
+        cases h,
+        {
+            rw [big_step_ite_iff],
+            apply or.intro_left,
+            apply and.intro,
+            { assumption, },
+            {
+                apply (hS s t).mpr,
+                assumption,
+            },
+        },
+        {
+            rw [big_step_ite_iff],
+            apply or.intro_right,
+            apply and.intro,
+            { assumption, },
+            {
+                apply (hT s t).mpr,
+                assumption,
+            },
+        }
+    }
+end
 
 /-! 1.3 (**optional**): Prove one more congruence rule. This one is more
 difficult. -/
