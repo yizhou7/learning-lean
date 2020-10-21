@@ -133,12 +133,12 @@ lemma big_step_equiv.seq_congr {S₁ S₂ T₁ T₂ : stmt} (hS : S₁ ≈ S₂)
 begin
     unfold big_step_equiv,
     intros,
+    unfold big_step_equiv at hS hT,
     apply iff.intro,
     {
         rw [big_step_seq_iff],
         intro h,
         cases h,
-        unfold big_step_equiv at hS hT,
         have h1: (S₂, s) ⟹ h_w := begin
             apply (hS s h_w).mp,
             apply and.elim_left h_h,
@@ -152,7 +152,19 @@ begin
         tautology,
     },
     {
-        sorry,
+        intro h,
+        cases h,
+        rw [big_step_seq_iff],
+        existsi h_t,
+        apply and.intro,
+        {
+            apply (hS s h_t).mpr,
+            assumption,
+        },
+        {
+            apply (hT h_t t).mpr,
+            assumption,
+        },
     },
 end
 
