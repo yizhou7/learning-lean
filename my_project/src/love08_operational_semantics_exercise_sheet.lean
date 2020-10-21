@@ -398,7 +398,23 @@ end
   (stmt.choice Ss, s) ⟹ t ↔
   (∃(i : ℕ) (hless : i < list.length Ss),
      (list.nth_le Ss i hless, s) ⟹ t) :=
-sorry
+begin
+    apply iff.intro,
+    {
+        intro h,
+        cases h,
+        existsi h_i,
+        existsi h_hless,
+        assumption,
+    },
+    {
+        intro h,
+        cases h,
+        cases h_h,
+        apply big_step.choice h_w h_h_w, 
+        assumption,
+    }
+end
 
 end gcl
 
