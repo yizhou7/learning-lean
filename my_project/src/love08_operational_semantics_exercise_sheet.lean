@@ -130,7 +130,31 @@ rules: -/
 lemma big_step_equiv.seq_congr {S₁ S₂ T₁ T₂ : stmt} (hS : S₁ ≈ S₂)
     (hT : T₁ ≈ T₂) :
   S₁ ;; T₁ ≈ S₂ ;; T₂ :=
-sorry
+begin
+    unfold big_step_equiv,
+    intros,
+    apply iff.intro,
+    {
+        rw [big_step_seq_iff],
+        intro h,
+        cases h,
+        unfold big_step_equiv at hS hT,
+        have h1: (S₂, s) ⟹ h_w := begin
+            apply (hS s h_w).mp,
+            apply and.elim_left h_h,
+        end,
+        have h2:  (T₂, h_w) ⟹ t := begin
+            apply (hT h_w t).mp,
+            apply and.elim_right h_h,
+        end,
+        rw [big_step_seq_iff],
+        existsi h_w,
+        tautology,
+    },
+    {
+        sorry,
+    },
+end
 
 lemma big_step_equiv.ite_congr {b} {S₁ S₂ T₁ T₂ : stmt} (hS : S₁ ≈ S₂)
     (hT : T₁ ≈ T₂) :
