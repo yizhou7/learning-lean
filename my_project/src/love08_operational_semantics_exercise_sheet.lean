@@ -80,52 +80,53 @@ end
 lemma big_step_equiv.ite_seq_while {b} {S : stmt} :
   stmt.ite b (S ;; stmt.while b S) stmt.skip ≈ stmt.while b S :=
 begin
-    unfold big_step_equiv,
     intros s t,
-    apply iff.intro,
-    {
-        intro h,
-        cases h,
-        cases h_hbody,
-        {
-            rw [big_step_while_true_iff],
-            {
-                existsi h_hbody_t,
-                tautology,
-            },
-            { assumption, }
-        },
-        {
-            rw [big_step_while_false_iff],
-            {
-                cases h_hbody,
-                tautology,
-            },
-            { assumption, }
-        },
-    },
-    {
-        intro h,
-        cases h,
-        {
-            rw [big_step_ite_iff],
-            apply or.intro_left,
-            apply and.intro,
-            { assumption, },
-            {
-                rw [big_step_seq_iff],
-                existsi h_t,
-                tautology,
-            }
-        },
-        {
-            rw [big_step_ite_iff],
-            apply or.intro_right,
-            apply and.intro,
-            { assumption, },
-            { rw [big_step_skip_iff],}
-        }
-    },
+    rw [big_step_while_iff],
+    simp,
+    -- apply iff.intro,
+    -- {
+    --     intro h,
+    --     cases h,
+    --     cases h_hbody,
+    --     {
+    --         rw [big_step_while_true_iff],
+    --         {
+    --             existsi h_hbody_t,
+    --             tautology,
+    --         },
+    --         { assumption, }
+    --     },
+    --     {
+    --         rw [big_step_while_false_iff],
+    --         {
+    --             cases h_hbody,
+    --             tautology,
+    --         },
+    --         { assumption, }
+    --     },
+    -- },
+    -- {
+    --     intro h,
+    --     cases h,
+    --     {
+    --         rw [big_step_ite_iff],
+    --         apply or.intro_left,
+    --         apply and.intro,
+    --         { assumption, },
+    --         {
+    --             rw [big_step_seq_iff],
+    --             existsi h_t,
+    --             tautology,
+    --         }
+    --     },
+    --     {
+    --         rw [big_step_ite_iff],
+    --         apply or.intro_right,
+    --         apply and.intro,
+    --         { assumption, },
+    --         { rw [big_step_skip_iff],}
+    --     }
+    -- },
 end
 
 /-! 1.2. Program equivalence can be used to replace subprograms by other
@@ -235,7 +236,16 @@ end
 difficult. -/
 
 lemma denote_equiv.while_congr {b} {S₁ S₂ : stmt} (hS : S₁ ≈ S₂) :
-  stmt.while b S₁ ≈ stmt.while b S₂ := sorry
+  stmt.while b S₁ ≈ stmt.while b S₂ := 
+begin
+    -- intros s t,
+    -- apply iff.intro,
+    -- {
+    --     generalize G : (stmt.while b S₁, s) = st1,
+    --     sorry,
+    -- }
+    sorry,
+end
 
 /-! ## Question 2: Guarded Command Language (GCL)
 

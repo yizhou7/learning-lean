@@ -116,15 +116,15 @@ exists.intro 0 (by refl)
 
 lemma modus_ponens (a b : Prop) :
   (a → b) → a → b :=
-assume hab : a → b,
-assume ha : a,
+λ hab : a → b,
+λ ha : a,
 show b, from
   hab ha
 
 lemma not_not_intro (a : Prop) :
   a → ¬¬ a :=
-assume ha : a,
-assume hna : ¬ a,
+λ ha : a,
+λ hna : ¬ a,
 show false, from
   begin
     apply hna ha,
@@ -362,6 +362,8 @@ begin
   exact hab
 end
 
+#check λ (Q R S : Type*) (v : R → S) (u : Q → R) (x : Q),
+        v (u x)
 /-! Tactical proofs are reduced to proof terms. -/
 
 #print and_swap₃

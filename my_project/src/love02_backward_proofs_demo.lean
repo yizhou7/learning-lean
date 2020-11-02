@@ -31,6 +31,7 @@ begin
   apply ha
 end
 
+#check fst_of_two_props
 /-! ## Basic Tactics
 
 `intro`(`s`) moves `∀`-quantified variables, or the assumptions of

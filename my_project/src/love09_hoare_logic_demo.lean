@@ -1,7 +1,7 @@
 import .love08_operational_semantics_demo
 
 
-/-! # LoVe Demo 9: Hoare Logic
+/- # LoVe Demo 9: Hoare Logic
 
 We review a second way to specify the semantics of a programming language: Hoare
 logic. If operational semantics corresponds to an idealized interpreter,
@@ -10,16 +10,17 @@ Hoare logic is particularly convenient to reason about concrete programs. -/
 
 
 set_option pp.beta true
+set_option pp.generalized_field_notation false
 
 namespace LoVe
 
 
-/-! ## First Things First: Formalization Projects
+/- ## First Things First: Formalization Projects
 
-Instead of two of the homeworks, you can do a verification project, worth
-20 points. If you choose to do so, please send your lecturer a message (by email
-or via Canvas) by the end of the week. For a fully successful project, we expect
-about 200 (or more) lines of Lean, including definitions and proofs.
+Instead of two of the homework sheets, you can do a verification project, worth
+20 points. If you choose to do so, please send your lecturer a message by email
+by the end of the week. For a fully successful project, we expect about 200 (or
+more) lines of Lean, including definitions and proofs.
 
 Some ideas for projects follow.
 
@@ -111,13 +112,13 @@ The following is a complete set of rules for reasoning about WHILE programs:
     —————————————————————— Seq
     {P} S; S' {Q}
 
-    {I ∧ b} S {Q}   {I ∧ ¬b} S' {Q}
+    {P ∧ b} S {Q}   {P ∧ ¬b} S' {Q}
     ——————————————————————————————— If
-    {I} if b then S else S' {Q}
+    {P} if b then S else S' {Q}
 
-    {P ∧ b} S {P}
+    {I ∧ b} S {I}
     ————————————————————————— While
-    {P} while b do S {P ∧ ¬b}
+    {I} while b do S {I ∧ ¬b}
 
     P' → P   {P} S {Q}   Q → Q'
     ——————————————————————————— Conseq
@@ -196,11 +197,11 @@ lemma seq_intro {P Q R S T} (hS : {* P *} S {* Q *})
     (hT : {* Q *} T {* R *}) :
   {* P *} S ;; T {* R *} :=
 begin
-  intros s t P hst,
+  intros s t hs hst,
   cases hst,
   apply hT,
   { apply hS,
-    { exact P },
+    { exact hs },
     { assumption } },
   { assumption }
 end
@@ -224,14 +225,13 @@ lemma while_intro (P : state → Prop) {b : state → Prop} {S}
     (h : {* λs, P s ∧ b s *} S {* P *}) :
   {* P *} stmt.while b S {* λs, P s ∧ ¬ b s *} :=
 begin
-  intros s t hs,
-  generalize hws : (stmt.while b S, s) = ws,
-  intro hst,
-  induction hst generalizing s; cases hws,
-  { apply hst_ih_hrest hst_t,
-    { apply h hst_s; cc },
-    { refl } },
-  { exact and.intro hs hst_hcond }
+  intros s t hs hst,
+  induction hst,
+  case while_true {
+    apply ih_hst_1 P h,
+    exact h _ _ (and.intro hs hcond) hst },
+  case while_false {
+    exact and.intro hs hcond }
 end
 
 lemma consequence {P P' Q Q' : state → Prop} {S}
@@ -276,7 +276,7 @@ lemma while_intro' {b P Q : state → Prop} {S}
   {* P *} stmt.while b S {* Q *} :=
 consequence (while_intro I hS) hP (by finish)
 
-/-! `finish` applies a combination of techniques, including normalization of
+/- `finish` applies a combination of techniques, including normalization of
 logical connectives and quantifiers, simplification, congruence closure, and
 quantifier instantiation. It either fully succeeds or fails. -/
 
@@ -306,7 +306,7 @@ end
 end partial_hoare
 
 
-/-! ## First Program: Exchanging Two Variables -/
+/- ## First Program: Exchanging Two Variables -/
 
 def SWAP : stmt :=
 stmt.assign "t" (λs, s "a") ;;
@@ -333,15 +333,14 @@ lemma SWAP_correct₂ (a₀ b₀ : ℕ) :
 begin
   intros s t hP hstep,
   cases hstep,
+  cases hP,
   cases hstep_hS,
   cases hstep_hT,
-  cases hstep_hT_hS,
-  cases hstep_hT_hT,
   finish
 end
 
 
-/-! ## Second Program: Adding Two Numbers -/
+/- ## Second Program: Adding Two Numbers -/
 
 def ADD : stmt :=
 stmt.while (λs, s "n" ≠ 0)
@@ -359,14 +358,17 @@ partial_hoare.while_intro' (λs, s "n" + s "m" = n₀ + m₀)
     { apply partial_hoare.assign_intro',
       simp,
       intros s hnm hnz,
-      rewrite ←hnm,
-      cases s "n"; finish }
+      rw ←hnm,
+      cases s "n",
+      { finish },
+      { simp [nat.succ_eq_add_one],
+        linarith } }
   end
   (by simp { contextual := true })
   (by simp { contextual := true })
 
 
-/-! ## A Verification Condition Generator
+/- ## A Verification Condition Generator
 
 __Verification condition generators__ (VCGs) are programs that apply Hoare rules
 automatically, producing __verification conditions__ that must be proved by the
@@ -432,7 +434,7 @@ do
 
 end LoVe
 
-/-! Register `vcg` as a proper tactic: -/
+/- Register `vcg` as a proper tactic: -/
 
 meta def tactic.interactive.vcg : tactic unit :=
 LoVe.vcg
@@ -440,7 +442,7 @@ LoVe.vcg
 namespace LoVe
 
 
-/-! ## Second Program Revisited: Adding Two Numbers -/
+/- ## Second Program Revisited: Adding Two Numbers -/
 
 lemma ADD_correct₂ (n₀ m₀ : ℕ) :
   {* λs, s "n" = n₀ ∧ s "m" = m₀ *}
@@ -455,12 +457,15 @@ show {* λs, s "n" = n₀ ∧ s "m" = m₀ *}
   begin
     vcg; simp { contextual := tt },
     intros s hnm hnz,
-    rewrite ←hnm,
-    cases s "n"; finish
+    rw ←hnm,
+    cases s "n",
+    { finish },
+    { simp [nat.succ_eq_add_one],
+      linarith }
   end
 
 
-/-! ## Hoare Triples for Total Correctness
+/- ## Hoare Triples for Total Correctness
 
 __Total correctness__ asserts that the program not only is partially correct but
 also that it always terminates normally. Hoare triples for total correctness
@@ -470,8 +475,8 @@ have the form
 
 Intended meaning:
 
-    If the `P` holds before `S` is executed, the execution terminates normally
-    and `Q` holds in the final state.
+    If `P` holds before `S` is executed, the execution terminates normally and
+    `Q` holds in the final state.
 
 For deterministic programs, an equivalent formulation is as follows:
 
@@ -487,9 +492,9 @@ annotated by a __variant__ `V` (a natural number that decreases with each
 iteration):
 
     [I ∧ b ∧ V = v₀] S [I ∧ V < v₀]
-    ——————————————————————————————— While
+    ——————————————————————————————— While-Var
     [I] while b do S [I ∧ ¬b]
 
-What is the variant in the example above? -/
+What is a suitable variant for the example above? -/
 
 end LoVe
