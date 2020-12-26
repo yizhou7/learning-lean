@@ -14,6 +14,14 @@ set_option pp.generalized_field_notation false
 
 namespace LoVe
 
+-- def stupid : Π (a : ℕ), ℕ :=
+--     λ a, a + 1
+-- #check stupid 
+
+-- theorem t1 : Π (p q : Prop) (hp: p) (hq: q), p :=
+-- λ (p q : Prop) (hp : p) (hq : q), hp
+-- #check t1
+-- #print t1
 
 /- ## First Things First: Formalization Projects
 

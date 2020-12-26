@@ -32,8 +32,45 @@ capture both the work that has been done already (the intermediate result) and
 the work that remains to be done. -/
 
 lemma GAUSS_correct (n₀ : ℕ) :
-  {* λs, s "n" = n₀ *} GAUSS {* λs, s "r" = sum_upto n₀ *} :=
-sorry
+    {* λs, s "n" = n₀ *} GAUSS {* λs, s "r" = sum_upto n₀ *} :=
+show {* λs, s "n" = n₀ *}
+  stmt.assign "r" (λs, 0) ;;
+  stmt.while_inv (λ s, (sum_upto (s "n")) + s "r" ==  sum_upto n₀ )
+    (λs, s "n" ≠ 0)
+    (stmt.assign "r" (λs, s "r" + s "n") ;;
+    stmt.assign "n" (λs, s "n" - 1))
+    {* λs, s "r" = sum_upto n₀ *}, from
+begin
+  vcg; simp {contextual := tt},
+  {
+    intros s hinv hloop,
+    rw <- hinv,
+    have h: (sum_upto (s "n" - 1)) + s "n" = sum_upto (s "n"), by {
+      cases (s "n"),
+      { triv,},
+      {
+        have h2: sum_upto(n.succ - 1) == sum_upto n, by {
+            simp,
+        },
+        simp [h2, sum_upto],
+        have h3: (sum_upto n) + n.succ = (sum_upto n) + (n + 1), by {
+          have h4: n.succ = n + 1, by { simp },
+          simp [h4],
+        },
+        simp [h3],
+        cc,
+      }
+    },
+    rw <- h,
+    cc,
+  },
+  {
+    intros s hinv hloop,
+    rw <- hloop,
+    unfold sum_upto,
+    finish,
+  }
+end
 
 /-! 1.2. The following WHILE program is intended to compute the product of `n`
 and `m`, leaving the result in `r`. Prove its correctness using `vcg`.
@@ -56,6 +93,7 @@ sorry
 
 def total_hoare (P : state → Prop) (S : stmt) (Q : state → Prop) : Prop :=
 ∀s, P s → ∃t, (S, s) ⟹ t ∧ Q t
+#print total_hoare
 
 notation `[* ` P : 1 ` *] ` S : 1 ` [* ` Q : 1 ` *]` :=
 total_hoare P S Q
@@ -67,7 +105,14 @@ namespace total_hoare
 lemma consequence {P P' Q Q' : state → Prop} {S}
     (hS : [* P *] S [* Q *]) (hP : ∀s, P' s → P s) (hQ : ∀s, Q s → Q' s) :
   [* P' *] S [* Q' *] :=
-sorry
+begin
+    intro s,
+    intro hps,
+    cases hS s (hP s hps),
+    use w,
+    cases h,
+    tautology,
+end
 
 /-! 2.2. Prove the rule for `skip`. -/
 
